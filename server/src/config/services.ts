@@ -267,7 +267,15 @@ export const initializeServices = async ({
 
 	const superSimpleQueue = SuperSimpleQueue.create(logger, superSimpleQueueHelper, monitorsRepository);
 
-	const incidentService = new IncidentService(logger, incidentsRepository, monitorsRepository, usersRepository, notificationsRepository, notificationMessageBuilder, superSimpleQueue);
+	const incidentService = new IncidentService(
+		logger,
+		incidentsRepository,
+		monitorsRepository,
+		usersRepository,
+		notificationsRepository,
+		notificationMessageBuilder,
+		superSimpleQueue
+	);
 
 	superSimpleQueueHelper.setIncidentService(incidentService);
 	await superSimpleQueue.init();

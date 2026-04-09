@@ -15,11 +15,7 @@ export interface INotificationMessageBuilder {
 		decision: MonitorActionDecision,
 		clientHost: string
 	): NotificationMessage;
-	buildEscalationMessage(
-		monitor: Monitor,
-		incident: Incident,
-		clientHost: string
-	): NotificationMessage;
+	buildEscalationMessage(monitor: Monitor, incident: Incident, clientHost: string): NotificationMessage;
 	extractThresholdBreaches(monitor: Monitor, monitorStatusResponse: MonitorStatusResponse): ThresholdBreach[];
 }
 
@@ -277,11 +273,7 @@ export class NotificationMessageBuilder implements INotificationMessageBuilder {
 		return breaches;
 	}
 
-	buildEscalationMessage(
-		monitor: Monitor,
-		incident: Incident,
-		clientHost: string
-	): NotificationMessage {
+	buildEscalationMessage(monitor: Monitor, incident: Incident, clientHost: string): NotificationMessage {
 		const type: NotificationType = "monitor_down"; // Escalation is for ongoing issues
 		const severity: NotificationSeverity = "critical";
 		const content = this.buildEscalationContent(monitor, incident);
@@ -329,7 +321,7 @@ export class NotificationMessageBuilder implements INotificationMessageBuilder {
 			`Incident Started: ${startTime}`,
 			`Duration: ${durationText}`,
 			`Incident ID: ${incident.id}`,
-			`Priority: HIGH - Escalation Alert`
+			`Priority: HIGH - Escalation Alert`,
 		];
 
 		if (incident.message) {

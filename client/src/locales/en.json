@@ -547,11 +547,9 @@
 					"description": "Select notification channels for escalation alerts sent after a delay if the incident persists",
 					"title": "Escalation notifications",
 					"option": {
-						
 						"delay": {
 							"label": "Escalation after (minutes)",
 							"description": "How long to wait before sending escalation notifications if the incident is still active"
-
 						},
 						"channels": {
 							"label": "Escalation notification channels"

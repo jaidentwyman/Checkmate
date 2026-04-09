@@ -2,14 +2,7 @@ const SERVICE_NAME = "JobQueueHelper";
 import type { Monitor } from "@/types/monitor.js";
 import { supportsGeoCheck } from "@/types/monitor.js";
 import { AppError } from "@/utils/AppError.js";
-import {
-	ICheckService,
-	INetworkService,
-	INotificationsService,
-	ISettingsService,
-	IStatusService,
-	type IGeoChecksService,
-} from "@/service/index.js";
+import { ICheckService, INetworkService, INotificationsService, ISettingsService, IStatusService, type IGeoChecksService } from "@/service/index.js";
 import type { IIncidentService } from "@/service/business/incidentService.js";
 import { CHECK_TTL_SENTINEL, type MaintenanceWindow, type StatusChangeResult } from "@/types/index.js";
 import {
@@ -182,14 +175,14 @@ export class SuperSimpleQueueHelper implements ISuperSimpleQueueHelper {
 				}
 
 				// Step 7. Handle incidents (best effort, don't wait)
-			this.incidentService!.handleIncident(statusChangeResult.monitor, statusChangeResult.code, decision, status).catch((error: unknown) => {
-				this.logger.warn({
-					message: `Error handling incident for job ${monitor.id}: ${error instanceof Error ? error.message : "Unknown error"}`,
-					service: SERVICE_NAME,
-					method: "getMonitorJob",
-					stack: error instanceof Error ? error.stack : undefined,
+				this.incidentService!.handleIncident(statusChangeResult.monitor, statusChangeResult.code, decision, status).catch((error: unknown) => {
+					this.logger.warn({
+						message: `Error handling incident for job ${monitor.id}: ${error instanceof Error ? error.message : "Unknown error"}`,
+						service: SERVICE_NAME,
+						method: "getMonitorJob",
+						stack: error instanceof Error ? error.stack : undefined,
+					});
 				});
-			});
 			} catch (error: unknown) {
 				this.logger.warn({
 					message: error instanceof Error ? error.message : "Unknown error",
@@ -558,13 +551,19 @@ export class SuperSimpleQueueHelper implements ISuperSimpleQueueHelper {
 				};
 
 				const tasks = escalationNotifications.map((notification) =>
-					this.notificationsService.sendDirectNotification(notification, monitor, mockMonitorStatusResponse, {
-						shouldCreateIncident: false,
-						shouldResolveIncident: false,
-						shouldSendNotification: true,
-						incidentReason: null,
-						notificationReason: "status_change"
-					}, escalationMessage)
+					this.notificationsService.sendDirectNotification(
+						notification,
+						monitor,
+						mockMonitorStatusResponse,
+						{
+							shouldCreateIncident: false,
+							shouldResolveIncident: false,
+							shouldSendNotification: true,
+							incidentReason: null,
+							notificationReason: "status_change",
+						},
+						escalationMessage
+					)
 				);
 
 				const outcomes = await Promise.all(tasks);

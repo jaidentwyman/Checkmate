@@ -128,16 +128,16 @@ export class IncidentService implements IIncidentService {
 					details: { incidentId: createdIncident.id, monitorId: monitor.id },
 				});
 
-			// Schedule escalation notifications asynchronously without blocking
-			this.scheduleEscalationNotifications(monitor, createdIncident).catch((error: unknown) => {
-				this.logger.error({
-					message: `Failed to schedule escalation notifications for incident ${createdIncident.id}: ${error instanceof Error ? error.message : "Unknown error"}`,
-					service: SERVICE_NAME,
-					method: "handleIncident",
-					details: { incidentId: createdIncident.id, monitorId: monitor.id },
-					stack: error instanceof Error ? error.stack : undefined,
+				// Schedule escalation notifications asynchronously without blocking
+				this.scheduleEscalationNotifications(monitor, createdIncident).catch((error: unknown) => {
+					this.logger.error({
+						message: `Failed to schedule escalation notifications for incident ${createdIncident.id}: ${error instanceof Error ? error.message : "Unknown error"}`,
+						service: SERVICE_NAME,
+						method: "handleIncident",
+						details: { incidentId: createdIncident.id, monitorId: monitor.id },
+						stack: error instanceof Error ? error.stack : undefined,
+					});
 				});
-			});
 
 				return createdIncident;
 			}
@@ -195,7 +195,7 @@ export class IncidentService implements IIncidentService {
 		try {
 			// Check if monitor has escalation notifications configured
 			const escalationNotificationIds = monitor.escalationNotifications ?? [];
-			
+
 			this.logger.debug({
 				message: `Checking escalation config for monitor ${monitor.id}: escalationNotifications=${escalationNotificationIds.length}, escalationDelay=${monitor.escalationDelay}`,
 				service: SERVICE_NAME,
@@ -215,18 +215,18 @@ export class IncidentService implements IIncidentService {
 			}
 
 			// Schedule escalation job for the monitor
-			await this.queueService.addEscalationJob(
-				incident.id,
-				monitor.id,
-				monitor.teamId,
-				delayMinutes
-			);
+			await this.queueService.addEscalationJob(incident.id, monitor.id, monitor.teamId, delayMinutes);
 
 			this.logger.info({
 				message: `Scheduled escalation notification for incident ${incident.id} with ${escalationNotificationIds.length} notification(s) after ${monitor.escalationDelay} minutes`,
 				service: SERVICE_NAME,
 				method: "scheduleEscalationNotifications",
-				details: { incidentId: incident.id, monitorId: monitor.id, notificationCount: escalationNotificationIds.length, delayMinutes: monitor.escalationDelay },
+				details: {
+					incidentId: incident.id,
+					monitorId: monitor.id,
+					notificationCount: escalationNotificationIds.length,
+					delayMinutes: monitor.escalationDelay,
+				},
 			});
 		} catch (error: unknown) {
 			this.logger.error({

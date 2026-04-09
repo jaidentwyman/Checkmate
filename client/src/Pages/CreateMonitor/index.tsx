@@ -778,11 +778,18 @@ const CreateMonitorPage = () => {
 									{...field}
 									value={field.value ?? 30}
 									type="number"
-									fieldLabel={t("pages.createMonitor.form.escalationNotifications.option.delay.label")}
+									fieldLabel={t(
+										"pages.createMonitor.form.escalationNotifications.option.delay.label"
+									)}
 									placeholder="30"
 									fullWidth
 									error={!!fieldState.error}
-									helperText={fieldState.error?.message ?? t("pages.createMonitor.form.escalationNotifications.option.delay.description")}
+									helperText={
+										fieldState.error?.message ??
+										t(
+											"pages.createMonitor.form.escalationNotifications.option.delay.description"
+										)
+									}
 									inputProps={{ min: 1, max: 1440 }}
 								/>
 							)}
@@ -810,7 +817,9 @@ const CreateMonitorPage = () => {
 												field.onChange(newValue.map((n) => n.id));
 											}}
 											isOptionEqualToValue={(option, value) => option.id === value.id}
-											fieldLabel={t("pages.createMonitor.form.escalationNotifications.option.channels.label")}
+											fieldLabel={t(
+												"pages.createMonitor.form.escalationNotifications.option.channels.label"
+											)}
 										/>
 										{selectedEscalationNotifications.length > 0 && (
 											<Stack
@@ -840,7 +849,9 @@ const CreateMonitorPage = () => {
 														>
 															<Trash2 size={16} />
 														</IconButton>
-														{index < selectedEscalationNotifications.length - 1 && <Divider />}
+														{index < selectedEscalationNotifications.length - 1 && (
+															<Divider />
+														)}
 													</Stack>
 												))}
 											</Stack>
